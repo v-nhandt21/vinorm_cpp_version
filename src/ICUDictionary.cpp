@@ -15,7 +15,6 @@ bool ICUDictionary::loadDictFile(const char *name) {
         line.trim();
         dict.insert(line);
     }
-    cerr << "[L] Add words to dictionary " << name << " successfully" << '\n';
     return true;
 }
 bool ICUDictionary::hasWord(const UnicodeString& input) {

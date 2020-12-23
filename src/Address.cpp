@@ -16,8 +16,6 @@ void Address::loadPatterns(int categories, string filename) {
     }
 }
 UnicodeString Address::stringForReplace(int categories, RegexMatcher* matcher, UErrorCode &status) {
-    cerr << "[L] Using rule " << categories << " of Address\n";
-    cerr << "[L] Match: " << matcher->group(status) << '\n';
     switch(categories) {
         case POLITICAL_DIVISION:
             return regexPoliticalDivision(matcher, status);
@@ -148,7 +146,7 @@ UnicodeString Address::regexStreet(RegexMatcher* matcher, UErrorCode &status) {
                 result += converter.convertNumber(number) + " ";
                 number = UnicodeString();
             }
-            result += " , ";
+            //result += " , ";
         } else {
             if (continuousDigits) {
                 continuousDigits  = false;
@@ -205,7 +203,7 @@ UnicodeString Address::regexOffice(RegexMatcher* matcher, UErrorCode& status) {
                 result += converter.convertNumber(number) + " ";
                 number = UnicodeString();
             }
-            result += " , ";
+            //result += " , ";
         } else {
             if (continuousDigits) {
                 continuousDigits  = false;
@@ -219,6 +217,206 @@ UnicodeString Address::regexOffice(RegexMatcher* matcher, UErrorCode& status) {
         result += converter.convertNumber(number);
     return prefix + " " + result;
 }
+// UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status) {
+//     UnicodeString match = matcher->group(status);
+//     UnicodeString result;
+//     UnicodeString number;
+//     UnicodeString PopWord;
+//     bool continuousDigits = false;
+//     bool continuous_Lowercase_Popular = false;
+//     ConvertingNumber converter;
+//     ICUMapping letterSound;
+//     ICUMapping letterVN;
+
+//     string letterVNFile = MAPPING_FOLDER + "/" + F_LETTER_SOUND_VN;
+//     letterVN.loadMappingFile(letterVNFile.data());
+
+//     ICUDictionary popularWord;
+//     string popFile = DICT_FOLDER + "/" + F_POPULAR;
+//     popularWord.loadDictFile(popFile.data());
+    
+//     string letterSoundFile = MAPPING_FOLDER + "/" + F_LETTER_SOUND_VN;
+//     letterSound.loadMappingFile(letterSoundFile.data());
+//     letterSoundFile = MAPPING_FOLDER + "/" + F_SYMBOL;
+//     letterSound.loadMappingFile(letterSoundFile.data());
+
+//     match.trim();
+//     StringCharacterIterator iter(match);
+    
+//     for (auto c = iter.first32(); c != StringCharacterIterator::DONE; c = iter.next32()) {
+//         UnicodeString ctm = UnicodeString (c) ;
+//         if (DIGIT_ZERO <= c && c <= DIGIT_ZERO + 9 ) {
+//             if (continuousDigits) {
+//                 number += c;
+//             } else {
+//                 if (DIGIT_ZERO == c)
+//                 {
+//                     continuousDigits = false;
+//                     result += "không ";
+//                     number = UnicodeString();
+//                 }
+//                 else {
+//                     number = c;
+//                     continuousDigits = true;
+//                 }
+//             }
+//             if (continuous_Lowercase_Popular) {
+//                 continuous_Lowercase_Popular  = false;
+//                 if (popularWord.hasWord(PopWord))
+//                     result+=PopWord+" ";
+//                 else{
+//                     // check if token include vowel
+//                     StringCharacterIterator iterNum(PopWord);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += letterSound.mappingOf(UnicodeString(cn)) + " ";
+//                     }
+//                 }
+//                 PopWord = UnicodeString();
+//             }
+//         } else if (letterVN.hasMappingOf(ctm) && ctm.toUpper() != c ) { //TOI5
+//             if (continuousDigits) {
+//                 continuousDigits  = false;
+//                 if (number.length() <= 4)
+//                     result += converter.convertNumber(number) + " "; 
+//                 else {
+//                     StringCharacterIterator iterNum(number);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += converter.convertNumber(cn) + " ";
+//                     }
+//                 }
+//                 number = UnicodeString();
+//             }
+//             if (continuous_Lowercase_Popular) {
+//                 PopWord += c;
+//             } else {
+//                 PopWord = c;
+//                 continuous_Lowercase_Popular = true;
+//             }
+//         } else if (c == SOLIDUS) {
+//             if (continuousDigits) {
+//                 continuousDigits  = false;
+//                 if (number.length() <= 4)
+//                     result += converter.convertNumber(number) + " "; 
+//                 else {
+//                     StringCharacterIterator iterNum(number);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += converter.convertNumber(cn) + " ";
+//                     }
+//                 }
+//                 number = UnicodeString();
+//             }
+//             if (continuous_Lowercase_Popular) {
+//                 continuous_Lowercase_Popular  = false;
+//                 if (popularWord.hasWord(PopWord))
+//                     result+=PopWord+" ";
+//                 else{
+//                     StringCharacterIterator iterNum(PopWord);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += letterSound.mappingOf(UnicodeString(cn)) + " ";
+//                     }
+//                 }
+//                 PopWord = UnicodeString();
+//             }
+//             result += "xuyệt ";
+//         } else if (c == FULL_STOP ) {
+//             if (continuousDigits) {
+//                 continuousDigits  = false;
+//                 if (number.length() <= 4)
+//                     result += converter.convertNumber(number) + " "; 
+//                 else {
+//                     StringCharacterIterator iterNum(number);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += converter.convertNumber(cn) + " ";
+//                     }
+//                 }
+//                 number = UnicodeString();
+//             }
+//             if (continuous_Lowercase_Popular) {
+//                 continuous_Lowercase_Popular  = false;
+//                 if (popularWord.hasWord(PopWord))
+//                     result+=PopWord+" ";
+//                 else{
+//                     StringCharacterIterator iterNum(PopWord);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += letterSound.mappingOf(UnicodeString(cn)) + " ";
+//                     }
+//                 }
+//                 PopWord = UnicodeString();
+//             }
+//             result += "chấm ";
+//         } else if (c == HYPEN_MINUS) {
+//             if (continuousDigits) {
+//                 continuousDigits  = false;
+//                 if (number.length() <= 4)
+//                     result += converter.convertNumber(number) + " "; 
+//                 else {
+//                     StringCharacterIterator iterNum(number);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += converter.convertNumber(cn) + " ";
+//                     }
+//                 } 
+//                 number = UnicodeString();
+//             }
+//             if (continuous_Lowercase_Popular) {
+//                 continuous_Lowercase_Popular  = false;
+//                 if (popularWord.hasWord(PopWord))
+//                     result+=PopWord+" ";
+//                 else{
+//                     StringCharacterIterator iterNum(PopWord);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += letterSound.mappingOf(UnicodeString(cn)) + " ";
+//                     }
+//                 }
+//                 PopWord = UnicodeString();
+//             }
+//             result += " , ";
+//         } else {
+//             if (continuousDigits) {
+//                 continuousDigits  = false;
+//                 if (number.length() <= 4)
+//                     result += converter.convertNumber(number) + " "; 
+//                 else {
+//                     StringCharacterIterator iterNum(number);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += converter.convertNumber(cn) + " ";
+//                     }
+//                 }
+//                 number = UnicodeString();
+//             }
+//             if (continuous_Lowercase_Popular) {
+//                 continuous_Lowercase_Popular  = false;
+//                 if (popularWord.hasWord(PopWord))
+//                     result+=PopWord+" ";
+//                 else{
+//                     StringCharacterIterator iterNum(PopWord);
+//                     for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                         result += letterSound.mappingOf(UnicodeString(cn)) + " ";
+//                     }
+//                 }
+//                 PopWord = UnicodeString();
+//             }
+//             result += letterSound.mappingOf(UnicodeString(c)) + " ";
+//         }
+//     }
+//     if (number.length() > 0) {
+//         if (number.length() <= 4)
+//             result += converter.convertNumber(number) + " "; 
+//         else {
+//             StringCharacterIterator iterNum(number);
+//             for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//                 result += converter.convertNumber(cn) + " ";
+//             }
+//         }
+//     }
+//     if (PopWord.length() > 0) {
+//         StringCharacterIterator iterNum(PopWord);
+//         for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
+//             result += letterSound.mappingOf(UnicodeString(cn)) + " ";
+//         }
+//     }
+//     return result;
+// }
+
 UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status) {
     UnicodeString match = matcher->group(status);
     UnicodeString result;
@@ -264,17 +462,10 @@ UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status
             }
             if (continuous_Lowercase_Popular) {
                 continuous_Lowercase_Popular  = false;
-                if (popularWord.hasWord(PopWord))
-                    result+=PopWord+" ";
-                else{
-                    StringCharacterIterator iterNum(PopWord);
-                    for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
-                        result += letterSound.mappingOf(UnicodeString(cn)) + " ";
-                    }
-                }
+                result+=PopWord+" ";
                 PopWord = UnicodeString();
             }
-        } else if (letterVN.hasMappingOf(ctm) && ctm.toUpper() != c ) { //TOI5
+        } else if (letterVN.hasMappingOf(ctm)) {
             if (continuousDigits) {
                 continuousDigits  = false;
                 if (number.length() <= 4)
@@ -308,14 +499,7 @@ UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status
             }
             if (continuous_Lowercase_Popular) {
                 continuous_Lowercase_Popular  = false;
-                if (popularWord.hasWord(PopWord))
-                    result+=PopWord+" ";
-                else{
-                    StringCharacterIterator iterNum(PopWord);
-                    for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
-                        result += letterSound.mappingOf(UnicodeString(cn)) + " ";
-                    }
-                }
+                result+=PopWord+" ";
                 PopWord = UnicodeString();
             }
             result += "xuyệt ";
@@ -334,14 +518,7 @@ UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status
             }
             if (continuous_Lowercase_Popular) {
                 continuous_Lowercase_Popular  = false;
-                if (popularWord.hasWord(PopWord))
-                    result+=PopWord+" ";
-                else{
-                    StringCharacterIterator iterNum(PopWord);
-                    for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
-                        result += letterSound.mappingOf(UnicodeString(cn)) + " ";
-                    }
-                }
+                result+=PopWord+" ";
                 PopWord = UnicodeString();
             }
             result += "chấm ";
@@ -360,17 +537,10 @@ UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status
             }
             if (continuous_Lowercase_Popular) {
                 continuous_Lowercase_Popular  = false;
-                if (popularWord.hasWord(PopWord))
-                    result+=PopWord+" ";
-                else{
-                    StringCharacterIterator iterNum(PopWord);
-                    for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
-                        result += letterSound.mappingOf(UnicodeString(cn)) + " ";
-                    }
-                }
+                result+=PopWord+" ";
                 PopWord = UnicodeString();
             }
-            result += " , ";
+            //result += " , ";
         } else {
             if (continuousDigits) {
                 continuousDigits  = false;
@@ -386,14 +556,7 @@ UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status
             }
             if (continuous_Lowercase_Popular) {
                 continuous_Lowercase_Popular  = false;
-                if (popularWord.hasWord(PopWord))
-                    result+=PopWord+" ";
-                else{
-                    StringCharacterIterator iterNum(PopWord);
-                    for (auto cn = iterNum.first32(); cn != StringCharacterIterator::DONE; cn = iterNum.next32()){
-                        result += letterSound.mappingOf(UnicodeString(cn)) + " ";
-                    }
-                }
+                result+=PopWord+" ";
                 PopWord = UnicodeString();
             }
             result += letterSound.mappingOf(UnicodeString(c)) + " ";
@@ -417,6 +580,8 @@ UnicodeString Address::regexCodenumber(RegexMatcher* matcher, UErrorCode& status
     }
     return result;
 }
+
+
 Address::Address() {
     loadPatterns(POLITICAL_DIVISION, F_POLITICAL_DIVISION);
     loadPatterns(STREET, F_STREET);

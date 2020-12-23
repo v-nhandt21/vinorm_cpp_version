@@ -11,7 +11,6 @@ Math::~Math() {
     u_cleanup();
 }
 UnicodeString Math::stringForReplace(int categories, RegexMatcher* matcher, UErrorCode &status, int pattern) {
-    cerr << "[L] Using rule " << categories << " of Math\n";
     switch(categories) {
         case ROMAN_NUMBER:
             return regexRomanNumber(matcher, status);
@@ -112,7 +111,6 @@ UnicodeString Math::regexRomanNumber(RegexMatcher* outerMatcher, UErrorCode &out
     UnicodeString result;
     while (matcher->find(status) && U_SUCCESS(status)) {
         UnicodeString found = matcher->group(status);
-        cerr << "[L] Norman Number found : " << found << '\n';
         matcher->appendReplacement(result, converter.romanToDecimal(found) ,status);
     }
     matcher->appendTail(result);
@@ -192,7 +190,6 @@ UnicodeString Math::LocalhandleMeasurement(RegexMatcher* matcher, UErrorCode &st
             next = "đến";
         }
         if (!unitCurrencyMapping.hasMappingOf(unit)) {
-            cerr << "[L] Mapping Unit of [" << unit << "] does not exist\n";
             return " " +  ICUHelper::readNumber(number,point) + " "  +next+" ";
         }
         else{

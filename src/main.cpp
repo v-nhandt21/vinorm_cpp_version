@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     UnicodeString normalizedText;
     // Read input file line by line
     for (inputFile.nextLine(0); inputFile.getLineStart() < inputFile.getFileLength();
-         inputFile.nextLine(inputFile.getLineEnd()))
+        inputFile.nextLine(inputFile.getLineEnd()))
     {
         UnicodeString line = UnicodeString(FALSE, inputFile.getContentUChar() + inputFile.getLineStart(), inputFile.getLineEnd() - inputFile.getLineStart());
         line = removeExtraWhitespace(line);

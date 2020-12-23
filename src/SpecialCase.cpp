@@ -16,7 +16,6 @@ void SpecialCase::loadPatterns(int categories, string filename) {
     }
 }
 UnicodeString SpecialCase::stringForReplace(int categories, RegexMatcher* matcher, UErrorCode &status) {
-    cerr << "[L] Using rule " << categories << " of Special Case\n";
     switch(categories) {
         case PHONE_NUMBER:
             return regexPhoneNumber(matcher, status);

@@ -6,7 +6,7 @@ CXX Compiler: g++
 
 # For Ubuntu 18.04
 
-  - Start at folder **VOS_Update_Frontend**
+  - Start at folder **Vinorm_cpp_version**
   - Move to src
 ```sh
 $ cd src
@@ -25,3 +25,35 @@ $ touch input.txt
 $ ./main
 ```
 
+Some example and option for normalization
+
+- Input
+```
+Có phải tháng 12/2020 đã có vaccine phòng ngừa Covid-19 xmz ?
+```
+- Output
+```sh 
+./main
+Có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có vaccine phòng ngừa Covid mười chín ích mờ giét .
+```
+- Lowercase output
+```sh 
+./main -lower
+có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có vaccine phòng ngừa covid mười chín ích mờ giét .
+```
+- Do not handle unknown words, discard word undefine and do not contain vowel, do not spell word with vowel
+```sh 
+./main -unknown
+Có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có vaccine phòng ngừa Covid mười chín xmz
+```
+- Keep, do not replace punctuation with dot and coma
+```sh 
+./main -punc
+Có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có vaccine phòng ngừa Covid mười chín ích mờ giét ?
+```
+- Just get normalization wit Regex, not using Dictionary Checking
+```sh 
+./main -rule
+Có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có vaccine phòng ngừa Covid mười chín xmz ?
+```
+To access old version, check src(1.0.7), this version handle with undefine words in address code form.

@@ -179,8 +179,49 @@ bool containsVowel(const UnicodeString &word)
     }
     return false;
 }
+
+bool to_bool(const std::string& x) {
+  assert(x == "0" || x == "1");
+  return x == "1";
+}
+
 int main(int argc, char *argv[])
 {
+    bool punc = false; // if true: keep do not replace with dot and coma
+    bool unknown = false; // if true: discard word undefine and do not contain vowel, do not spell word with vowel
+    bool lower = false; // if false: Just get normalization without lowercase
+    bool rule = false; // if true: Just get normalization wit Regex, not using Dictionary Checking
+
+    for (int i = 1; i < argc; i++)
+    {  
+        if (strcmp(argv[i], "-punc") == 0)
+        {                 
+            punc = true;
+            continue;
+        }
+        if (strcmp(argv[i], "-unknown") == 0)
+        {                 
+            unknown = true;
+            continue;
+        }
+        if (strcmp(argv[i], "-lower") == 0)
+        {                 
+            lower = true;
+            continue;
+        }
+        if (strcmp(argv[i], "-rule") == 0)
+        {                 
+            rule = true;
+            continue;
+        }
+    }
+
+    cerr<<argc<<'\n';
+    cerr<<punc<< '\n';
+    cerr<<unknown<< '\n';
+    cerr<<lower<< '\n';
+    cerr<<rule<< '\n';
+
     // Regex Rules
     SpecialCase specialCase;
     Address address;
@@ -216,7 +257,7 @@ int main(int argc, char *argv[])
     UnicodeString normalizedText;
     // Read input file line by line
     for (inputFile.nextLine(0); inputFile.getLineStart() < inputFile.getFileLength();
-         inputFile.nextLine(inputFile.getLineEnd()))
+        inputFile.nextLine(inputFile.getLineEnd()))
     {
         UnicodeString line = UnicodeString(FALSE, inputFile.getContentUChar() + inputFile.getLineStart(), inputFile.getLineEnd() - inputFile.getLineStart());
         line = removeExtraWhitespace(line);
@@ -228,7 +269,12 @@ int main(int argc, char *argv[])
         normalizedText = address.normalizeText(normalizedText);
 
         normalizedText = removeExtraWhitespace(normalizedText);
-        fout << normalizedText << "#@#";
+        
+        if (rule == true){
+            fout << normalizedText << "#line#";
+            continue;
+        }
+        
         UnicodeString result;
         UnicodeString match;
         UErrorCode status = U_ZERO_ERROR;
@@ -281,12 +327,12 @@ int main(int argc, char *argv[])
                 {
                     TMsymbol = matcherAdd->group(2, statusAdd);
                     normalized_word = matcherAdd->group(1, statusAdd);
-                    /*
-                    if (TMsymbol == "." || TMsymbol == "!" || TMsymbol == ":" || TMsymbol == "?")
-                        TMsymbol = ".";
-                    else if (TMsymbol == "," || TMsymbol == ";")
-                        TMsymbol = ",";
-                        */
+                    if (punc == false ){
+                        if (TMsymbol == "." || TMsymbol == "!" || TMsymbol == ":" || TMsymbol == "?")
+                            TMsymbol = ".";
+                        else if (TMsymbol == "," || TMsymbol == ";")
+                            TMsymbol = ",";
+                    }
                 }
                 delete matcherAdd;
                 delete regexPatternAdd;
@@ -325,7 +371,7 @@ int main(int argc, char *argv[])
 
                 auto start = boundary->first();
                 for (auto end = boundary->next(); end != BreakIterator::DONE;
-                     start = end, end = boundary->next())
+                    start = end, end = boundary->next())
                 {
 
                     UnicodeString token = UnicodeString(normalized_word, start, end - start);
@@ -350,14 +396,18 @@ int main(int argc, char *argv[])
 
                     if (wordAdd == "." || wordAdd == "!" || wordAdd == ":" || wordAdd == "?")
                     {
-                        //resultAdd += " . ";
-                        resultAdd += " " + wordAdd + " ";
+                        if (punc == false)
+                            resultAdd += " . ";
+                        else
+                            resultAdd += " " + wordAdd + " ";
                         continue;
                     }
                     if (wordAdd == "," || wordAdd == ";" || wordAdd == "/")
                     {
-                        //resultAdd += " , ";
-                        resultAdd += " " + wordAdd + " ";
+                        if (punc == false)
+                            resultAdd += " , ";
+                        else
+                            resultAdd += " " + wordAdd + " ";
                         continue;
                     }
                     if (symbol.hasMappingOf(wordAdd))
@@ -378,23 +428,25 @@ int main(int argc, char *argv[])
                                 resultAdd += " " + ICUHelper::readNumber(checkRoman, 0) + " ";
                                 continue;
                             }
-                            resultAdd += " " + wordAdd + " ";
-                            //resultAdd += " " + readLetterByLetter(wordAdd, letterSoundEN) + " ";
+                            if (unknown == true)
+                                resultAdd += " " + wordAdd + " ";
+                            else
+                                resultAdd += " " + readLetterByLetter(wordAdd, letterSoundEN) + " ";
                             continue;
                         }
-                        resultAdd += " " + wordAdd + " ";
-                        /*
-                        else if (!containsVowel(wordAdd))
-                        {
-                            resultAdd += " " + readLetterByLetter(wordAdd, letterSoundVN) + " ";
-                            continue;
+                        
+                        else if (unknown == false){
+                            if (!containsVowel(wordAdd))
+                            {
+                                resultAdd += " " + readLetterByLetter(wordAdd, letterSoundVN) + " ";
+                                continue;
+                            }
+                            else
+                            {
+                                resultAdd += " " + wordAdd + " ";
+                            }
                         }
-                        else
-                        {
-
-                            resultAdd += " " + wordAdd + " ";
-                        }
-                        */
+                        else resultAdd += " " + wordAdd + " ";
                     }
                     else
                     {
@@ -405,11 +457,12 @@ int main(int argc, char *argv[])
             }
             result += resultAdd;
         }
-        //result.toLower();
+        if (lower == true)
+        {
+            result.toLower();
+        }
         result = removeNovoiceSymbol(result, 1);
         result = removeExtraWhitespace(result);
-        fout << result << "#@#";
-        result.toLower();
         fout << result << "#line#";
         delete matcher;
         delete regexPattern;

@@ -19,7 +19,7 @@ bool ICUMapping::loadMappingFile(const char *name) {
         pronoun.trim();
         mapping[unit] = pronoun;
     }
-    cerr << "[L] Add words to map " << name << " successfully" << '\n';
+    //cerr << "[L] Add words to map " << name << " successfully" << '\n';
     return true;
 }
 UnicodeString ICUMapping::mappingOf(const UnicodeString &unit) {
@@ -45,7 +45,7 @@ UnicodeString ICUMapping::mappingOf(const UnicodeString &unit) {
     unitTrim.toLower();
     if (mapping.find(unitTrim) != mapping.end())
         return mapping[unitTrim];
-    cerr << "[L] Word not found in mapping " << mappingName << " : " << unit << '\n';
+    //cerr << "[L] Word not found in mapping " << mappingName << " : " << unit << '\n';
     return UnicodeString();
 }
 bool ICUMapping::hasMappingOf(const UnicodeString& input) {

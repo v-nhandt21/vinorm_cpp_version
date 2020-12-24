@@ -149,7 +149,7 @@ class ICUHelper{
             UnicodeString normalizedText = "";
             auto compositeUnits = splitFractionUnit(unit);
             for (int i = 0;  i < compositeUnits.size(); i++) {
-                cerr << "[L] Unit: " << compositeUnits[i] << '\n';
+                //Unit: " << compositeUnits[i] << '\n';
                 normalizedText += " "+splitCompositeUnit(compositeUnits[i])+" ";
                 if (compositeUnits.size() > 1 && i != (int) compositeUnits.size() - 1) {
                     normalizedText += " trên ";

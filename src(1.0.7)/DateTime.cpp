@@ -66,7 +66,7 @@ DateTime::~DateTime() {
     u_cleanup();
 }
 UnicodeString DateTime::stringForReplace(int categories, RegexMatcher* matcher, UErrorCode &status) {
-    cerr << "[L] Using rule " << categories << " of Date Time\n";
+    //cerr << "[L] Using rule " << categories << " of Date Time\n";
     switch(categories) {
         case TIME:
             return regexTime(matcher, status);

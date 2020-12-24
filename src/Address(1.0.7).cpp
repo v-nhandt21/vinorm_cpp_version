@@ -16,8 +16,8 @@ void Address::loadPatterns(int categories, string filename) {
     }
 }
 UnicodeString Address::stringForReplace(int categories, RegexMatcher* matcher, UErrorCode &status) {
-    cerr << "[L] Using rule " << categories << " of Address\n";
-    cerr << "[L] Match: " << matcher->group(status) << '\n';
+    //cerr << "[L] Using rule " << categories << " of Address\n";
+    //cerr << "[L] Match: " << matcher->group(status) << '\n';
     switch(categories) {
         case POLITICAL_DIVISION:
             return regexPoliticalDivision(matcher, status);

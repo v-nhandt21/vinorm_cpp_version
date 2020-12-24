@@ -216,12 +216,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    cerr<<argc<<'\n';
-    cerr<<punc<< '\n';
-    cerr<<unknown<< '\n';
-    cerr<<lower<< '\n';
-    cerr<<rule<< '\n';
-
     // Regex Rules
     SpecialCase specialCase;
     Address address;

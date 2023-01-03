@@ -11,7 +11,7 @@ bool ICUMapping::loadMappingFile(const char *name) {
     }
     for (mappingFile.nextLine(0); mappingFile.getLineStart() < mappingFile.getFileLength();
             mappingFile.nextLine(mappingFile.getLineEnd())) {
-        UnicodeString line = UnicodeString(FALSE, mappingFile.getContentUChar() + mappingFile.getLineStart(), mappingFile.getLineEnd()  - mappingFile.getLineStart());
+        UnicodeString line = UnicodeString(false, mappingFile.getContentUChar() + mappingFile.getLineStart(), mappingFile.getLineEnd()  - mappingFile.getLineStart());
         auto separatorPosition = line.indexOf(UnicodeString("#"));
         UnicodeString unit = UnicodeString(line, 0, separatorPosition);
         UnicodeString pronoun = UnicodeString(line, separatorPosition+ 1);

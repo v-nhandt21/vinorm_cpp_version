@@ -25,6 +25,30 @@ $ touch input.txt
 $ ./main
 ```
 
+# For macos 
+  - Start at folder **Vinorm_cpp_version**
+```sh
+  brew install icu4c
+```
+  - Move to src
+```sh
+$ cd src
+```
+  - Set LD_LIBRARY_PATH to "lib" folder in current folder
+```sh
+$ export LD_LIBRARY_PATH=../lib
+```
+  - Run make main to compile
+```sh
+$ make main
+```
+  - Reading text from "input.txt" and print to "output.txt" (create new file input.txt to input, the input.txt must have content)
+```sh
+$ touch input.txt
+$ ./main
+```
+
+
 Some example and option for normalization
 
 - Input

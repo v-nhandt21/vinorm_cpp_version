@@ -11,7 +11,7 @@ bool ICUDictionary::loadDictFile(const char *name) {
     }
     for (dictFile.nextLine(0); dictFile.getLineStart() < dictFile.getFileLength();
             dictFile.nextLine(dictFile.getLineEnd())) {
-        UnicodeString line = UnicodeString(FALSE, dictFile.getContentUChar() + dictFile.getLineStart(), dictFile.getLineEnd()  - dictFile.getLineStart());
+        UnicodeString line = UnicodeString(false, dictFile.getContentUChar() + dictFile.getLineStart(), dictFile.getLineEnd()  - dictFile.getLineStart());
         line.trim();
         dict.insert(line);
     }

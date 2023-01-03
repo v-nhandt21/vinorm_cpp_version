@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
     for (inputFile.nextLine(0); inputFile.getLineStart() < inputFile.getFileLength();
          inputFile.nextLine(inputFile.getLineEnd()))
     {
-        UnicodeString line = UnicodeString(FALSE, inputFile.getContentUChar() + inputFile.getLineStart(), inputFile.getLineEnd() - inputFile.getLineStart());
+        UnicodeString line = UnicodeString(false, inputFile.getContentUChar() + inputFile.getLineStart(), inputFile.getLineEnd() - inputFile.getLineStart());
         line = removeExtraWhitespace(line);
         // Regex rules processing
         normalizedText = removeExtraWhitespace(line);

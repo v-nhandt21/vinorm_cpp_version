@@ -9,7 +9,7 @@ void Address::loadPatterns(int categories, string filename) {
         return ;
     }
     for (f.nextLine(0); f.getLineStart() < f.getFileLength(); f.nextLine(f.getLineEnd())) {
-        UnicodeString line = UnicodeString(FALSE, f.getContentUChar() + f.getLineStart(), 
+        UnicodeString line = UnicodeString(false, f.getContentUChar() + f.getLineStart(), 
                 f.getLineEnd()  - f.getLineStart());
         line.trim();
         patterns[categories].push_back(line);

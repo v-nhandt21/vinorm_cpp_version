@@ -57,3 +57,13 @@ Có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có v
 Có phải tháng mười hai năm hai nghìn không trăm hai mươi đã có vaccine phòng ngừa Covid mười chín xmz ?
 ```
 To access old version, check src(1.0.7), this version handle with undefine words in address code form.
+
+### Acknowledge
+
+This project was conducted by
+
+- Le Tan Dang Tam
+
+- Do Tri Nhan
+
+During our time as collaborators at AILab, HCMUS, under the supervision of Professor Vu Hai Quan.
